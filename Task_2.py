@@ -8,7 +8,7 @@ owned_trucks = [
 # Nicknamed Toolbox
     "White Chevy Tahoe: 2002 1/2 ton",
 # Nicknamed Panda
-    "Maroon Chevy Silverado: 2000 1/5 ton"
+    "Maroon Chevy Silverado: 2000 1/2 ton"
 # Nicknamed Junior
 # Nicknames matter due to line 25 
 ]
