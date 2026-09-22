@@ -1,0 +1,20 @@
+{
+    "name": "Dylan",
+    "statistics": {
+        "height": 6.5,
+        "age": "22"
+    },
+    "other data": [
+        {
+            "name": "Katrena",
+            "height": 5.5,
+            "age": "23"
+        },
+        {
+            "name": "Drake",
+            "height": 5.8,
+            "age": "20"
+        }
+    ]
+}
+
