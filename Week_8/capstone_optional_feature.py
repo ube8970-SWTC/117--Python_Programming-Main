@@ -16,7 +16,7 @@ RESET = "\033[0m"
 CONTACT_EMAIL = "your-email@example.com"
 CONTACT_PHONE = "(555) 555-5555"
 
-
+# added new more products
 products = [
     {"id": 1, "name": "Cluster Lighting", "price": 220},
     {"id": 2, "name": "Cluster Rebuild", "price": 250},
@@ -65,7 +65,7 @@ def sync_selected_products(product_menu, selected_ids):
 
 
 def main():
-    # Allow each item to be selected by a numbered menu choice
+    # Allows each item to be selected by a numbered menu choice
     product_menu = build_product_menu()
     valid_product_ids = {product["id"] for product in product_menu}
     selected_ids = set()
