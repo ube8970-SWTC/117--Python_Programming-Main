@@ -5,11 +5,24 @@
 # These items and pricing are from my company; Lighting Dynamics
 # Available products
 
+RED = "\033[31m"
+BLUE = "\033[34m"
+GREEN = "\033[32m"
+BOLD = "\033[1m"
+RESET = "\033[0m"
+
+# Replace these values with your contact information.
+CONTACT_EMAIL = "your-email@example.com"
+CONTACT_PHONE = "(555) 555-5555"
+
+
 products = [
     {"id": 1, "name": "Cluster Lighting", "price": 220},
     {"id": 2, "name": "Cluster Rebuild", "price": 250},
     {"id": 3, "name": "Offroad Lighting", "price": 400},
     {"id": 4, "name": "Alternative Switch Lighting", "price": 150},
+    {"id": 5, "name": "Roof Rack Lighting", "price": 300},
+    {"id": 6, "name": "Custom Work", "price": 350},
 ]
 
 
@@ -26,80 +39,84 @@ def build_product_menu():
     ]
 
 
-def main():
-    # Allow each item to be selected by a numbered menu choice
-    product_menu = build_product_menu()
+def parse_product_ids(raw_text, valid_ids):
+    """Return a set of valid product IDs or None if the input is invalid."""
+    values = raw_text.replace(",", " ").split()
+    if not values:
+        return None
 
-    # Display the list with selectable IDs
-    for product in product_menu:
-        print(f"{product['id']}. {product['name']} - ${product['price']}")
+    ids = set()
+    for value in values:
+        if not value.isdigit():
+            return None
+        product_id = int(value)
+        if product_id not in valid_ids:
+            return None
+        ids.add(product_id)
 
-    valid_product_ids = {product["id"] for product in product_menu}
-    selected_ids = set()
-    while not selected_ids:
-        selected_ids_input = input(
-            "Enter product numbers to select, separated by commas (for example: 1, 2, 3, 4): "
-        )
+    return ids
 
-        # Accept comma-separated numbers, spaces, or a mix such as "1, 2, 3, 4".
-        values = selected_ids_input.replace(",", " ").split()
-        entered_ids = set()
-        valid_input = bool(values)
-        for value in values:
-            if not value.isdigit() or int(value) not in valid_product_ids:
-                valid_input = False
-                break
-            entered_ids.add(int(value))
 
-        if valid_input:
-            selected_ids = entered_ids
-        else:
-            print("No valid products selected. Please try again.")
-
+def sync_selected_products(product_menu, selected_ids):
+    """Keep each product's selected flag aligned with the selected IDs."""
     for product in product_menu:
         product["selected"] = product["id"] in selected_ids
 
-    while True:
-        print("\nCurrent selection:")
-        for product in product_menu:
-            if product["selected"]:
-                print(f"{product['id']}. {product['name']} - ${product['price']}")
 
-        deselect_input = input(
-            "Enter product numbers to deselect, separated by commas, or press Enter to continue: "
+def main():
+    # Allow each item to be selected by a numbered menu choice
+    product_menu = build_product_menu()
+    valid_product_ids = {product["id"] for product in product_menu}
+    selected_ids = set()
+
+    while True:
+        print("\nAvailable products:")
+        for product in product_menu:
+            status = "SELECTED" if product["selected"] else "AVAILABLE"
+            print(
+                f"{BLUE}{product['id']}. {product['name']} - ${product['price']} [{status}]{RESET}"
+            )
+
+        action = input(
+            "Enter product numbers to select, 'deselect 2, 3' to remove them, or 'done' to finish: "
         ).strip()
-        if not deselect_input:
+
+        if not action or action.lower() == "done":
             break
 
-        values = deselect_input.replace(",", " ").split()
-        deselect_ids = set()
-        valid_input = bool(values)
-        for value in values:
-            if not value.isdigit() or int(value) not in selected_ids:
-                valid_input = False
-                break
-            deselect_ids.add(int(value))
-
-        if valid_input:
+        if action.lower().startswith("deselect"):
+            raw_text = action[8:].strip()
+            deselect_ids = parse_product_ids(raw_text, selected_ids)
+            if deselect_ids is None:
+                print(f"{RED}{BOLD}Please enter only numbers for currently selected products.{RESET}")
+                continue
             selected_ids.difference_update(deselect_ids)
-            for product in product_menu:
-                product["selected"] = product["id"] in selected_ids
-        else:
-            print("Please enter only numbers for currently selected products.")
+            sync_selected_products(product_menu, selected_ids)
+            continue
+
+        selected_ids_to_add = parse_product_ids(action, valid_product_ids)
+        if selected_ids_to_add is None:
+            print(f"{RED}{BOLD}No valid products selected. Please try again.{RESET}")
+            continue
+
+        selected_ids.update(selected_ids_to_add)
+        sync_selected_products(product_menu, selected_ids)
 
     selected_products = [product for product in product_menu if product["selected"]]
 
     print("\nSelected products:")
     if selected_products:
         for product in selected_products:
-            print(f"{product['name']} - ${product['price']}")
+            print(f"{BLUE}{product['name']} - ${product['price']}{RESET}")
+        if any(product["id"] == 6 for product in selected_products):
+            print(f"Contact me: {CONTACT_EMAIL} | {CONTACT_PHONE}")
     else:
         print("No valid products selected.")
 
     total = sum(product["price"] for product in selected_products)
-    print(f"Total: ${total}")
+    print(f"{GREEN}Total: ${total}{RESET}")
 
 
 if __name__ == "__main__":
-    main()
+    main()  # Start the product selection program
 
