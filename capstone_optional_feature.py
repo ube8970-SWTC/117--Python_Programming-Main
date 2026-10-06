@@ -11,7 +11,8 @@ GREEN = "\033[32m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-# Replace these values with your contact information.
+# Can replace these values with my contact information.
+# Won't because repo is public
 CONTACT_EMAIL = "your-email@example.com"
 CONTACT_PHONE = "(555) 555-5555"
 
@@ -118,5 +119,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()  # Start the product selection program
+    main()  
 
