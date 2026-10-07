@@ -16,7 +16,7 @@ RESET = "\033[0m"
 CONTACT_EMAIL = "your-email@example.com"
 CONTACT_PHONE = "(555) 555-5555"
 
-# added new more products
+# added more new products
 products = [
     {"id": 1, "name": "Cluster Lighting", "price": 220},
     {"id": 2, "name": "Cluster Rebuild", "price": 250},
